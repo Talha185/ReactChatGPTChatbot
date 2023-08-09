@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <title>FAST Admission Chatbot</title>
+    <style>
+        *{
+            margin: 0%;
+            padding: 0%;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1f2833;
+            margin: 20px;
+        }
+
+        .chatbox {
+            border: 2px solid #000000;
+            padding: 10px;
+            height: 500px;
+            overflow-y: scroll;
+            background-color: #6d9197;
+        }
+
+        .user-message {
+            text-align: right;
+            margin-bottom: 5px;
+        }
+
+        .bot-message {
+            text-align: left;
+            margin-bottom: 5px;
+        }
+        .topper {
+            width: 100%;
+            height: 10%;
+            border: 1px solid #000000;
+            background-color: #45a293;
+            font-family: monospace;
+            font-weight: bold;
+            align-items: center;
+            display: flex;
+            justify-content: space-evenly;
+        }
+        .queryin {
+            width: 100%;
+            height: 30%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <h1 class="topper" >Admission Guide Chatbot</h1>
+
+    <div class="chatbox" id="chatbox" style="font-family: monospace;">
+        <div class="bot-message" style="font-family: monospace;">Hello! I'm your friendly chatbot. How can I help you today?</div>
+    </div>
+        <centre>
+            <div class = "queryin">
+                <input type="text" id="userInput" style="border-radius: 20px; width: 500px; margin-top: 2px;font-family: monospace;" placeholder="Enter your query..." />
+                <button type="button" class="btn btn-secondary btn-sm"  onclick="sendMessage()" style="margin-top: 2px; margin-left: 2px;">Send</button>
+            </div>
+        </centre>
+    
+
+    <script>
+       function sendMessage() {
+            var userInput = document.getElementById("userInput").value;
+            appendMessage("user", userInput);
+            document.getElementById("userInput").value = "";
+
+            // Fetching the data from the FastAPI server at port 8000
+            fetch(`http://127.0.0.1:8000/chatbot?user_query=${userInput}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                // body: JSON.stringify({
+                //     user_query: userInput
+                // })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response from the server (chatbot's response)
+                var botResponse = data.response;
+                // console.log(data)
+                appendMessage("bot", botResponse);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function getBotResponse(userInput) {
+            // Generating Bot response
+            var botResponse = generateBotResponse(userInput);
+            setTimeout(function () {
+                appendMessage("bot", botResponse);
+            }, 500);
+        }
+
+        function appendMessage(sender, message) {
+            var chatbox = document.getElementById("chatbox");
+            var newMessage = document.createElement("div");
+            newMessage.className = sender + "-message";
+            newMessage.textContent = message;
+            chatbox.appendChild(newMessage);
+            chatbox.scrollTop = chatbox.scrollHeight;
+        }
+    </script>
+</body>
+</html>
