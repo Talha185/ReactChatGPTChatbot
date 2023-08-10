@@ -35,7 +35,7 @@ app.add_middleware(
 HUGGING_FACE_API_KEY = "YOUR-KEY-HERE"
 
 import os
-os.environ["HUGGINGFACEHUB_API_TOKEN"] = "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"
+os.environ["HUGGINGFACEHUB_API_TOKEN"] = "YOUR-KEY-HERE"
 
 model = HuggingFaceHub(repo_id="google/flan-t5-large" ,model_kwargs={"temperature": 0.7, "max_length":64} ,huggingfacehub_api_token=HUGGING_FACE_API_KEY)
 
