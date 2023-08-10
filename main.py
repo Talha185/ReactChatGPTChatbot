@@ -32,7 +32,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-HUGGING_FACE_API_KEY = "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"
+HUGGING_FACE_API_KEY = "YOUR-KEY-HERE"
 
 import os
 os.environ["HUGGINGFACEHUB_API_TOKEN"] = "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"
